@@ -11,7 +11,7 @@ I will continue to be expanded, step-by-step.
 
 * JPEG Exif handling
 
-Optional dependencies
+Dependencies
 =====================
 
 - VisualStudio2010
