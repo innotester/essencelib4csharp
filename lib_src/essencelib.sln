@@ -1,5 +1,5 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
+Microsoft Visual Studio Solution File, Format Version 11.00 
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "essencelib", "essencelib.csproj", "{02F3D363-CBE6-4F42-9ADD-76C293209150}"
 EndProject
