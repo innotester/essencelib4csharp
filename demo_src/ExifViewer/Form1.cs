@@ -32,6 +32,13 @@ namespace ExifViewer
 
                     double SubfileType = -1;
 
+                    ExifTags.InitJpegTags();
+                    Rational v2 = (Rational)((ExifTag)ExifTags.tags[6]).GetValue((BitmapMetadata)decoder.Frames[0].Metadata);
+                    double alt = v2.ToDouble();
+                    GPSRational v = (GPSRational)((ExifTag)ExifTags.tags[2]).GetValue((BitmapMetadata)decoder.Frames[0].Metadata);
+                    double lon = v.ToDegree();
+                    ExifUtil4Jpeg.GetLongitude((BitmapMetadata)decoder.Frames[0].Metadata, ref lon);
+
                     ExifUtil4Jpeg.GetSubfileType((BitmapMetadata)decoder.Frames[0].Metadata, ref SubfileType);
 
                     Bitmap org_img = ExifUtil4Jpeg.GetBitmapFromBitmapSource(decoder.Frames[0]);
