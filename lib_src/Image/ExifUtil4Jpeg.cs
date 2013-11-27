@@ -210,6 +210,26 @@ namespace essencelib.Image
             return rtn;
         }
 
+        public static bool GetSubfileType(BitmapMetadata jpg_metadata, ref double type)
+        {
+            bool rtn = false;
+
+            if (jpg_metadata != null)
+            {
+                var raw_alt = jpg_metadata.GetQuery("/app1/ifd/exif/subifd:{ushort=33437}");
+                if (raw_alt != null)
+                {
+                    ulong l = (ulong)raw_alt;
+                    byte[] bytes = BitConverter.GetBytes(l);
+                    int num = BitConverter.ToInt32(bytes, 0);
+                    int denom = BitConverter.ToInt32(bytes, 4);
+                    type = (double)num / (double)denom;
+                    rtn = true;
+                }
+            }
+
+            return rtn;
+        }
 
         #region sub-function
 
@@ -231,7 +251,7 @@ namespace essencelib.Image
 
             using (MemoryStream stream = new MemoryStream())
             {
-                PngBitmapEncoder enc = new PngBitmapEncoder();
+                BmpBitmapEncoder enc = new BmpBitmapEncoder();
                 enc.Frames.Add(BitmapFrame.Create(bmp_src));
                 enc.Save(stream);
                 rtn = new Bitmap(stream);
