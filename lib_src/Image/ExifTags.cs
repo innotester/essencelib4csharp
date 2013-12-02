@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Collections;
 
+using System.Text;
 using System.Windows.Media.Imaging;
 
 namespace essencelib.Image
@@ -27,7 +28,7 @@ namespace essencelib.Image
                 Add(0x4, "GPSLongitude               ", "Longitude                                     ", "/app1/ifd/gps/subifd:{ulong=4}", TagValueType.GPSRational);
                 Add(0x5, "GPSAltitudeRef             ", "Altitude reference                            ", "/app1/ifd/gps/subifd:{ulong=5}", TagValueType.Unknown);
                 Add(0x6, "GPSAltitude                ", "Altitude                                      ", "/app1/ifd/gps/subifd:{ulong=6}", TagValueType.Rational);
-                Add(0x7, "GPSTimeStamp               ", "GPS time (atomic clock)                       ", "/app1/ifd/gps/subifd:{ulong=7}", TagValueType.Unknown);
+                Add(0x7, "GPSTimeStamp               ", "GPS time (atomic clock)                       ", "/app1/ifd/gps/subifd:{ulong=7}", TagValueType.GPSRational);
                 Add(0x8, "GPSSatellites              ", "GPS satellites used for measurement           ", "/app1/ifd/gps/subifd:{ulong=8}", TagValueType.Unknown);
                 Add(0x9, "GPSStatus                  ", "GPS receiver status                           ", "/app1/ifd/gps/subifd:{ulong=9}", TagValueType.Unknown);
                 Add(0xA, "GPSMeasureMode             ", "GPS measurement mode                          ", "/app1/ifd/gps/subifd:{ulong=10}", TagValueType.Unknown);
@@ -37,7 +38,7 @@ namespace essencelib.Image
                 Add(0xE, "GPSTrackRef                ", "Reference for direction of movement           ", "/app1/ifd/gps/subifd:{ulong=14}", TagValueType.Unknown);
                 Add(0xF, "GPSTrack                   ", "Direction of movement                         ", "/app1/ifd/gps/subifd:{ulong=15}", TagValueType.Unknown);
                 Add(0x10, "GPSImgDirectionRef         ", "Reference for direction of image              ", "/app1/ifd/gps/subifd:{ulong=16}", TagValueType.Unknown);
-                Add(0x11, "GPSImgDirection            ", "Direction of image                            ", "/app1/ifd/gps/subifd:{ulong=17}", TagValueType.Unknown);
+                Add(0x11, "GPSImgDirection            ", "Direction of image                            ", "/app1/ifd/gps/subifd:{ulong=17}", TagValueType.Rational);
                 Add(0x12, "GPSMapDatum                ", "Geodetic survey data used                     ", "/app1/ifd/gps/subifd:{ulong=18}", TagValueType.Unknown);
                 Add(0x13, "GPSDestLatitudeRef         ", "Reference for latitude of destination         ", "/app1/ifd/gps/subifd:{ulong=19}", TagValueType.Unknown);
                 Add(0x14, "GPSDestLatitude            ", "Latitude of destination                       ", "/app1/ifd/gps/subifd:{ulong=20}", TagValueType.Unknown);
@@ -64,8 +65,8 @@ namespace essencelib.Image
                 Add(0x115, "SamplesPerPixel            ", "Number of components                          ", "/app1/ifd/{ushort=277}", TagValueType.Unknown);
                 Add(0x116, "RowsPerStrip               ", "Number of rows per strip                      ", "/app1/ifd/{ushort=278}", TagValueType.Unknown);
                 Add(0x117, "StripByteCounts            ", "Bytes per compressed strip                    ", "/app1/ifd/{ushort=279}", TagValueType.Unknown);
-                Add(0x11A, "XResolution                ", "Image resolution in width direction           ", "/app1/ifd/{ushort=282}", TagValueType.Unknown);
-                Add(0x11B, "YResolution                ", "Image resolution in height direction          ", "/app1/ifd/{ushort=283}", TagValueType.Unknown);
+                Add(0x11A, "XResolution                ", "Image resolution in width direction           ", "/app1/ifd/{ushort=282}", TagValueType.Rational);
+                Add(0x11B, "YResolution                ", "Image resolution in height direction          ", "/app1/ifd/{ushort=283}", TagValueType.Rational);
                 Add(0x11C, "PlanarConfiguration        ", "Image data arrangement                        ", "/app1/ifd/{ushort=284}", TagValueType.Unknown);
                 Add(0x128, "ResolutionUnit             ", "Unit of X and Y resolution                    ", "/app1/ifd/{ushort=296}", TagValueType.Unknown);
                 Add(0x12D, "TransferFunction           ", "Transfer function                             ", "/app1/ifd/{ushort=301}", TagValueType.Unknown);
@@ -81,8 +82,8 @@ namespace essencelib.Image
                 Add(0x213, "YCbCrPositioning           ", "Y and C positioning                           ", "/app1/ifd/{ushort=531}", TagValueType.Unknown);
                 Add(0x214, "ReferenceBlackWhite        ", "Pair of black and white reference values      ", "/app1/ifd/{ushort=532}", TagValueType.Unknown);
                 Add(0x8298, "Copyright                  ", "Copyright holder                              ", "/app1/ifd/exif/subifd:{ushort=33432}", TagValueType.Unknown);
-                Add(0x829A, "ExposureTime               ", "Exposure time                                 ", "/app1/ifd/exif/subifd:{ushort=33434}", TagValueType.Unknown);
-                Add(0x829D, "FNumber                    ", "F number - LensAperture                       ", "/app1/ifd/exif/subifd:{ushort=33437}", TagValueType.Unknown);
+                Add(0x829A, "ExposureTime               ", "Exposure time                                 ", "/app1/ifd/exif/subifd:{ushort=33434}", TagValueType.Rational);
+                Add(0x829D, "FNumber                    ", "F number - LensAperture                       ", "/app1/ifd/exif/subifd:{ushort=33437}", TagValueType.Rational);
                 Add(0x8822, "ExposureProgram            ", "Exposure program                              ", "/app1/ifd/exif/subifd:{ushort=34850}", TagValueType.Unknown);
                 Add(0x8824, "SpectralSensitivity        ", "Spectral sensitivity                          ", "/app1/ifd/exif/subifd:{ushort=34852}", TagValueType.Unknown);
                 Add(0x8827, "ISOSpeedRatings            ", "ISO speed rating                              ", "/app1/ifd/exif/subifd:{ushort=34855}", TagValueType.Unknown);
@@ -92,16 +93,16 @@ namespace essencelib.Image
                 Add(0x9004, "DateTimeDigitized          ", "Date and time of digital data generation      ", "/app1/ifd/exif/subifd:{ushort=36868}", TagValueType.Unknown);
                 Add(0x9101, "ComponentsConfiguration    ", "Meaning of each component                     ", "/app1/ifd/exif/subifd:{ushort=37121}", TagValueType.Unknown);
                 Add(0x9102, "CompressedBitsPerPixel     ", "Image compression mode                        ", "/app1/ifd/exif/subifd:{ushort=37122}", TagValueType.Unknown);
-                Add(0x9201, "ShutterSpeedValue          ", "Shutter speed                                 ", "/app1/ifd/exif/subifd:{ushort=37377}", TagValueType.Unknown);
-                Add(0x9202, "ApertureValue              ", "Aperture                                      ", "/app1/ifd/exif/subifd:{ushort=37378}", TagValueType.Unknown);
-                Add(0x9203, "BrightnessValue            ", "Brightness                                    ", "/app1/ifd/exif/subifd:{ushort=37379}", TagValueType.Unknown);
+                Add(0x9201, "ShutterSpeedValue          ", "Shutter speed                                 ", "/app1/ifd/exif/subifd:{ushort=37377}", TagValueType.ShutterSpeed);
+                Add(0x9202, "ApertureValue              ", "Aperture                                      ", "/app1/ifd/exif/subifd:{ushort=37378}", TagValueType.Aperture);
+                Add(0x9203, "BrightnessValue            ", "Brightness                                    ", "/app1/ifd/exif/subifd:{ushort=37379}", TagValueType.Rational);
                 Add(0x9204, "ExposureBiasValue          ", "Exposure bias                                 ", "/app1/ifd/exif/subifd:{ushort=37380}", TagValueType.Unknown);
                 Add(0x9205, "MaxApertureValue           ", "Maximum lens aperture                         ", "/app1/ifd/exif/subifd:{ushort=37381}", TagValueType.Unknown);
                 Add(0x9206, "SubjectDistance            ", "Subject distance                              ", "/app1/ifd/exif/subifd:{ushort=37382}", TagValueType.Unknown);
                 Add(0x9207, "MeteringMode               ", "Metering mode                                 ", "/app1/ifd/exif/subifd:{ushort=37383}", TagValueType.Unknown);
                 Add(0x9208, "LightSource                ", "Light source                                  ", "/app1/ifd/exif/subifd:{ushort=37384}", TagValueType.Unknown);
                 Add(0x9209, "Flash                      ", "Flash                                         ", "/app1/ifd/exif/subifd:{ushort=37385}", TagValueType.Unknown);
-                Add(0x920A, "FocalLength                ", "Lens focal length                             ", "/app1/ifd/exif/subifd:{ushort=37386}", TagValueType.Unknown);
+                Add(0x920A, "FocalLength                ", "Lens focal length                             ", "/app1/ifd/exif/subifd:{ushort=37386}", TagValueType.Rational);
                 Add(0x9214, "SubjectArea                ", "Subject area                                  ", "/app1/ifd/exif/subifd:{ushort=37396}", TagValueType.Unknown);
                 Add(0x927C, "MakerNote                  ", "Manufacturer notes                            ", "/app1/ifd/exif/subifd:{ushort=37500}", TagValueType.Unknown);
                 Add(0x9286, "UserComment                ", "User comments                                 ", "/app1/ifd/exif/subifd:{ushort=37510}", TagValueType.Unknown);
@@ -150,6 +151,7 @@ namespace essencelib.Image
         public TagValueType value_type = TagValueType.Unknown;
         public ExifTag(int key, string name, string desc, string query, TagValueType value_type)
         {
+            this.key = key;
             this.name = name;
             this.desc = desc;
             this.query = query;
@@ -166,16 +168,47 @@ namespace essencelib.Image
                 switch (value_type)
                 {
                     case TagValueType.Unknown:
-                        
+                        rtn = new ExifTagValue();
+                        rtn.value = raw_value;
+                        rtn.tag_key = key;
                         break;
                     case TagValueType.Rational:
-                        rtn = new Rational((ulong)raw_value);
+                        if (raw_value is ulong)
+                            rtn = new Rational((ulong)raw_value);
+                        else if (raw_value is long)
+                            rtn = new Rational((long)raw_value);
+                        rtn.tag_key = key;
                         break;
                     case TagValueType.URational:
                         
                         break;
                     case TagValueType.GPSRational:
                         rtn = new GPSRational((ulong[])raw_value);
+                        rtn.tag_key = key;
+                        break;
+                    case TagValueType.Aperture:
+                        {
+                            Rational r_val = null;
+                            if (raw_value is ulong)
+                                r_val = new Rational((ulong)raw_value);
+                            else if (raw_value is long)
+                                r_val = new Rational((long)raw_value);
+                            rtn = new Aperture();
+                            rtn.value = Math.Pow(Math.Sqrt(2), r_val.ToDouble());
+                            rtn.tag_key = key;
+                        }
+                        break;
+                    case TagValueType.ShutterSpeed:
+                        {
+                            Rational r_val = null;
+                            if (raw_value is ulong)
+                                r_val = new Rational((ulong)raw_value);
+                            else if (raw_value is long)
+                                r_val = new Rational((long)raw_value);
+                            rtn = new ShutterSpeed();
+                            rtn.value = Math.Pow(2, r_val.ToDouble());
+                            rtn.tag_key = key;
+                        }
                         break;
                 }
             }
@@ -185,21 +218,62 @@ namespace essencelib.Image
         }
     }
 
-    public class ExifTagValue
-    {
-        public TagValueType value_type = TagValueType.Unknown;
-        public override string ToString()
-        {
-            return "";
-        }
-    }
-
     public enum TagValueType
     {
         Unknown = 0,
         Rational,
         URational,
         GPSRational,
+        Aperture,
+        ShutterSpeed,
+    }
+
+    public class ExifTagValue
+    {
+        public TagValueType value_type = TagValueType.Unknown;
+        public int tag_key = 0;
+        public object value = null;
+        public override string ToString()
+        {
+            string rtn = "";
+
+            if (value is ushort)
+            {
+                rtn = string.Format("{0}", (ushort)value);
+            }
+            else if (value is BitmapMetadataBlob)
+            {
+                BitmapMetadataBlob blob = value as BitmapMetadataBlob;
+                rtn = Encoding.ASCII.GetString(blob.GetBlobValue());
+            }
+            else if (value is string)
+            {
+                rtn = value as string;
+            }
+            else if (value is uint)
+            {
+                rtn = string.Format("{0}", (uint)value);
+            }
+            else if (value is byte)
+            {
+                rtn = string.Format("{0}", (byte)value);
+            }
+            else if (value is ushort[])
+            {
+                ushort[] uv = value as ushort[];
+
+                for (int i = 0; i < uv.Length; i++)
+                {
+                    rtn += uv[i].ToString();
+                }
+            }
+            else
+            {
+                object vv = value;
+            }
+
+            return rtn;
+        }
     }
 
     public sealed class Rational : ExifTagValue
@@ -217,6 +291,11 @@ namespace essencelib.Image
             SetValue(BitConverter.GetBytes(raw));
         }
 
+        public Rational(long raw)
+        {
+            SetValue(BitConverter.GetBytes(raw));
+        }
+
         private void SetValue(byte[] bytes)
         {
             value_type = TagValueType.Rational;
@@ -230,7 +309,7 @@ namespace essencelib.Image
 
         public double ToDouble()
         {
-            return Math.Round(Convert.ToDouble(_num) / Convert.ToDouble(_denom), 2);
+            return Convert.ToDouble(_num) / Convert.ToDouble(_denom); //Math.Round(, 2);
         }
 
         public string ToString(string separator)
@@ -244,35 +323,51 @@ namespace essencelib.Image
         }
     }
 
-    public sealed class URational : ExifTagValue
+    //public sealed class URational : ExifTagValue
+    //{
+    //    private UInt32 _num;
+    //    private UInt32 _denom;
+
+    //    public URational(byte[] bytes)
+    //    {
+    //        value_type = TagValueType.URational;
+    //        byte[] n = new byte[4];
+    //        byte[] d = new byte[4];
+    //        Array.Copy(bytes, 0, n, 0, 4);
+    //        Array.Copy(bytes, 4, d, 0, 4);
+    //        _num = BitConverter.ToUInt32(n, 0);
+    //        _denom = BitConverter.ToUInt32(d, 0);
+    //    }
+
+    //    public double ToDouble()
+    //    {
+    //        return Math.Round(Convert.ToDouble(_num) / Convert.ToDouble(_denom), 2);
+    //    }
+
+    //    public override string ToString()
+    //    {
+    //        return this.ToString("/");
+    //    }
+
+    //    public string ToString(string separator)
+    //    {
+    //        return _num.ToString() + separator + _denom.ToString();
+    //    }
+    //}
+
+    public sealed class Aperture : ExifTagValue
     {
-        private UInt32 _num;
-        private UInt32 _denom;
-
-        public URational(byte[] bytes)
-        {
-            value_type = TagValueType.URational;
-            byte[] n = new byte[4];
-            byte[] d = new byte[4];
-            Array.Copy(bytes, 0, n, 0, 4);
-            Array.Copy(bytes, 4, d, 0, 4);
-            _num = BitConverter.ToUInt32(n, 0);
-            _denom = BitConverter.ToUInt32(d, 0);
-        }
-
-        public double ToDouble()
-        {
-            return Math.Round(Convert.ToDouble(_num) / Convert.ToDouble(_denom), 2);
-        }
-
         public override string ToString()
         {
-            return this.ToString("/");
+            return string.Format("F/{0}", Math.Round((double)value, 2));
         }
+    }
 
-        public string ToString(string separator)
+    public sealed class ShutterSpeed : ExifTagValue
+    {
+        public override string ToString()
         {
-            return _num.ToString() + separator + _denom.ToString();
+            return string.Format("1/{0}", (int)(double)value);
         }
     }
 
