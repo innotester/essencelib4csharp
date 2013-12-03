@@ -17,6 +17,8 @@ namespace ExifViewer
         public Form1()
         {
             InitializeComponent();
+
+            ExifTags.InitJpegTags();
         }
 
         private void buttonBrowse_Click(object sender, EventArgs e)
@@ -28,14 +30,12 @@ namespace ExifViewer
                 {
                     JpegBitmapDecoder decoder = ExifUtil4Jpeg.GetJpegDecoder(dlg.FileName);
 
-                    if (pictureBoxMainImage.Image != null)
-                        pictureBoxMainImage.Image.Dispose();
+                    // Item Task
+                    listView1.Items.Clear();
 
-                    double SubfileType = -1;
+                    SortedList list = new SortedList(ExifTags.tags);
 
-                    ExifTags.InitJpegTags();
-
-                    foreach (DictionaryEntry _o in ExifTags.tags)
+                    foreach (DictionaryEntry _o in list)
                     {
                         ExifTag tag = _o.Value as ExifTag;
                         ExifTagValue exif_value = tag.GetValue((BitmapMetadata)decoder.Frames[0].Metadata);
@@ -43,86 +43,77 @@ namespace ExifViewer
                         if (exif_value != null)
                         {
                             string out_val = exif_value.ToString();
+                            string[] contents = new string[6];
 
-                            if (exif_value is Rational)
-                            {
-                                double v3 = ((Rational)exif_value).ToDouble();
-                            }
-                            else if (exif_value is GPSRational)
-                            {
-                                double v4 = ((GPSRational)exif_value).ToDegree();
-                            }
-                            else if (exif_value is Aperture)
-                            {
-                                double v4 = (double)((Aperture)exif_value).value;
-                            }
-                            else if (exif_value is ShutterSpeed)
-                            {
-                                double v4 = (double)((ShutterSpeed)exif_value).value;
-                            }
-                            else
-                            {
-                                if (exif_value.value is ushort)
-                                {
-                                }
-                                else if (exif_value.value is BitmapMetadataBlob)
-                                {
-                                    BitmapMetadataBlob blob = exif_value.value as BitmapMetadataBlob;
-                                    string s = Encoding.ASCII.GetString(blob.GetBlobValue());
-                                }
-                                else if (exif_value.value is string)
-                                {
-                                    string s = exif_value.value as string;
-                                }
-                                else if (exif_value.value is uint)
-                                {
-                                    uint u = (uint)exif_value.value;
-                                }
-                                else if (exif_value.value is byte)
-                                {
-                                    byte b = (byte)exif_value.value;
-                                }
-                                else if (exif_value.value is ushort[])
-                                {
-                                    ushort[] uv = exif_value.value as ushort[];
-                                }
-                                else
-                                {
-                                    object vv = exif_value.value;
-                                }
-                            }
+                            contents[0] = tag.key.ToString();
+                            contents[1] = string.Format("0x{0:X}", tag.key);
+                            contents[2] = tag.name;
+                            contents[3] = tag.desc;
+                            contents[4] = out_val;
+                            contents[5] = tag.query;
+
+                            ListViewItem item = new ListViewItem(contents);
+
+                            listView1.Items.Add(item);
                         }
                     }
-                    Rational v2 = (Rational)((ExifTag)ExifTags.tags[6]).GetValue((BitmapMetadata)decoder.Frames[0].Metadata);
-                    double alt = v2.ToDouble();
-                    GPSRational v = (GPSRational)((ExifTag)ExifTags.tags[2]).GetValue((BitmapMetadata)decoder.Frames[0].Metadata);
-                    double lon = v.ToDegree();
-                    ExifUtil4Jpeg.GetLongitude((BitmapMetadata)decoder.Frames[0].Metadata, ref lon);
 
-                    ExifUtil4Jpeg.GetSubfileType((BitmapMetadata)decoder.Frames[0].Metadata, ref SubfileType);
+                    // Thumbnail task 
+                    Bitmap thumb_bmp = ExifUtil4Jpeg.GetThumbnail(decoder);
 
-                    Bitmap org_img = ExifUtil4Jpeg.GetBitmapFromBitmapSource(decoder.Frames[0]);
-                    if (org_img != null)
+                    if (thumb_bmp != null)
                     {
-                        pictureBoxMainImage.Image = org_img;
+                        if (pictureBoxThumbImage.Image != null)
+                            pictureBoxThumbImage.Image.Dispose();
 
-                        if (org_img.Width > org_img.Height)
+                        labelThumbnail.Text = "Thumbnail (O)";
+
+                        pictureBoxThumbImage.Image = thumb_bmp;
+                    }
+                    else
+                    {
+                        Bitmap org_bmp = ExifUtil4Jpeg.GetBitmapFromBitmapSource(decoder.Frames[0]);
+
+                        int thumb_width = 0;
+                        int thumb_height = 0;
+
+                        if (org_bmp.Width > org_bmp.Height)
                         {
-                            pictureBoxMainImage.Width = 350;
-                            pictureBoxMainImage.Height = 350 * org_img.Height / org_img.Width;
+                            thumb_width = 160;
+                            thumb_height = 160 * org_bmp.Height / org_bmp.Width;
                         }
                         else
                         {
-                            pictureBoxMainImage.Height = 350;
-                            pictureBoxMainImage.Width = 350 * org_img.Width / org_img.Height;
+                            thumb_height = 160;
+                            thumb_width = 160 * org_bmp.Width / org_bmp.Height;
+                        }
+
+                        thumb_bmp = (Bitmap)org_bmp.GetThumbnailImage(thumb_width, thumb_height, delegate { return false; }, IntPtr.Zero);
+
+                        if (thumb_bmp != null)
+                        {
+                            if (pictureBoxThumbImage.Image != null)
+                                pictureBoxThumbImage.Image.Dispose();
+
+                            labelThumbnail.Text = "Thumbnail (X)";
+
+                            pictureBoxThumbImage.Image = thumb_bmp;
                         }
                     }
 
-                    if (pictureBoxThumbImage.Image != null)
-                        pictureBoxThumbImage.Image.Dispose();
-                    pictureBoxThumbImage.Image = ExifUtil4Jpeg.GetThumbnail(decoder);
                 }
             }
+        }
+
+        private void listView1_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == System.Windows.Forms.MouseButtons.Right && listView1.SelectedItems.Count == 1)
+                contextMenuStrip1.Show(Cursor.Position);
+        }
+
+        private void copyToClipboardToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
