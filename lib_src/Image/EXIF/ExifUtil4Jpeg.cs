@@ -14,7 +14,7 @@ using System.IO;
 using System.Windows.Media.Imaging;
 using System.Drawing;
 
-namespace essencelib.Image
+namespace essencelib.Image.EXIF
 {
     public class ExifUtil4Jpeg
     {
@@ -100,13 +100,14 @@ namespace essencelib.Image
             return rtn;
         }
 
-        // 
-        // Bitmap -> naspace : System.Drawing
-        //           reference : System.Drawing.dll
-        //
-        public static bool GetLatitude(JpegBitmapDecoder jpg_decoder, ref double latitude)
+        public static ExifTagValue GetTagValue(JpegBitmapDecoder jpg_decoder, TagType tag_type)
         {
-            bool rtn = false;
+            return GetTagValue(jpg_decoder, (int)tag_type);
+        }
+
+        public static ExifTagValue GetTagValue(JpegBitmapDecoder jpg_decoder, int tag_key)
+        {
+            ExifTagValue rtn = null;
 
             if (jpg_decoder != null)
             {
@@ -114,124 +115,72 @@ namespace essencelib.Image
                 if (jpg_decoder.Frames.Count > 0)
                 {
                     jpg_metadata = jpg_decoder.Frames[0].Metadata as BitmapMetadata;
-                    rtn = GetLatitude(jpg_metadata, ref latitude);
+                    rtn = GetTagValue(jpg_metadata, tag_key);
                 }
             }
 
             return rtn;
         }
 
-        public static bool GetLatitude(BitmapMetadata jpg_metadata, ref double latitude)
+        public static ExifTagValue GetTagValue(BitmapMetadata jpg_metadata, TagType tag_type)
         {
-            bool rtn = false;
+            return GetTagValue(jpg_metadata, (int)tag_type);
+        }
+
+        public static ExifTagValue GetTagValue(BitmapMetadata jpg_metadata, int tag_key)
+        {
+            ExifTagValue rtn;
 
             if (jpg_metadata != null)
-            {
-                ulong[] raw_lat = jpg_metadata.GetQuery("/app1/ifd/gps/subifd:{ulong=2}") as ulong[];
-                if (raw_lat != null)
-                {
-                    latitude = toDegree4GPS(raw_lat);
-                    rtn = true;
-                }
-            }
+                rtn = ExifTags.GetTag(tag_key).GetValue(jpg_metadata);
+            else
+                rtn = null;
 
             return rtn;
         }
 
-        public static bool GetLongitude(JpegBitmapDecoder jpg_decoder, ref double longitude)
+        public static ExifValues GetExifValues(BitmapMetadata jpg_metadata)
         {
-            bool rtn = false;
-
-            if (jpg_decoder != null)
-            {
-                BitmapMetadata jpg_metadata = null;
-                if (jpg_decoder.Frames.Count > 0)
-                {
-                    jpg_metadata = jpg_decoder.Frames[0].Metadata as BitmapMetadata;
-                    rtn = GetLongitude(jpg_metadata, ref longitude);
-                }
-            }
-
+            ExifValues rtn = new ExifValues();
+            rtn._metadata = jpg_metadata;
             return rtn;
         }
+        
+        #region Sample tag values
 
-        public static bool GetLongitude(BitmapMetadata jpg_metadata, ref double longitude)
+        public static GPSRational GetLatitude(JpegBitmapDecoder jpg_decoder)
         {
-            bool rtn = false;
-
-            if (jpg_metadata != null)
-            {
-                ulong[] raw_lon = jpg_metadata.GetQuery("/app1/ifd/gps/subifd:{ulong=4}") as ulong[];
-                if (raw_lon != null)
-                {
-                    longitude = toDegree4GPS(raw_lon);
-                    rtn = true;
-                }
-            }
-
-            return rtn;
+            return GetTagValue(jpg_decoder, (int)TagType.GPSLatitude) as GPSRational;
         }
 
-        public static bool GetAltitude(JpegBitmapDecoder jpg_decoder, ref double altitude)
+        public static GPSRational GetLatitude(BitmapMetadata jpg_metadata)
         {
-            bool rtn = false;
-
-            if (jpg_decoder != null)
-            {
-                BitmapMetadata jpg_metadata = null;
-                if (jpg_decoder.Frames.Count > 0)
-                {
-                    jpg_metadata = jpg_decoder.Frames[0].Metadata as BitmapMetadata;
-                    rtn = GetAltitude(jpg_metadata, ref altitude);
-                }
-            }
-
-            return rtn;
+            return GetTagValue(jpg_metadata, (int)TagType.GPSLatitude) as GPSRational;
         }
 
-        public static bool GetAltitude(BitmapMetadata jpg_metadata, ref double altitude)
+        public static GPSRational GetLongitude(JpegBitmapDecoder jpg_decoder)
         {
-            bool rtn = false;
-
-            if (jpg_metadata != null)
-            {
-                var raw_alt = jpg_metadata.GetQuery("/app1/ifd/gps/subifd:{ulong=6}");
-                if (raw_alt != null)
-                {
-                    ulong l = (ulong)raw_alt;
-                    byte[] bytes = BitConverter.GetBytes(l);
-                    int num = BitConverter.ToInt32(bytes, 0);
-                    int denom = BitConverter.ToInt32(bytes, 4);
-                    altitude = (double)num / (double)denom;
-                    rtn = true;
-                }
-            }
-
-            return rtn;
+            return GetTagValue(jpg_decoder, (int)TagType.GPSLongitude) as GPSRational;
         }
 
-        public static bool GetSubfileType(BitmapMetadata jpg_metadata, ref double type)
+        public static GPSRational GetLongitude(BitmapMetadata jpg_metadata)
         {
-            bool rtn = false;
-
-            if (jpg_metadata != null)
-            {
-                var raw_alt = jpg_metadata.GetQuery("/app1/ifd/exif/subifd:{ushort=33437}");
-                if (raw_alt != null)
-                {
-                    ulong l = (ulong)raw_alt;
-                    byte[] bytes = BitConverter.GetBytes(l);
-                    int num = BitConverter.ToInt32(bytes, 0);
-                    int denom = BitConverter.ToInt32(bytes, 4);
-                    type = (double)num / (double)denom;
-                    rtn = true;
-                }
-            }
-
-            return rtn;
+            return GetTagValue(jpg_metadata, (int)TagType.GPSLongitude) as GPSRational;
         }
 
-        #region sub-function
+        public static Rational GetAltitude(JpegBitmapDecoder jpg_decoder)
+        {
+            return GetTagValue(jpg_decoder, (int)TagType.GPSAltitude) as Rational;
+        }
+
+        public static Rational GetAltitude(BitmapMetadata jpg_metadata)
+        {
+            return GetTagValue(jpg_metadata, (int)TagType.GPSAltitude) as Rational;
+        }
+
+        #endregion
+
+        #region Sub-functions
 
         public static FileStream GetReadFileStream(string file_name)
         {
@@ -258,15 +207,6 @@ namespace essencelib.Image
             }
 
             return rtn;
-        }
-
-        private static double toDegree4GPS(ulong[] raw)
-        {
-            int dash = (int)(raw[0] - ((ulong)0x100000000));
-            int _f = (int)(raw[1] - ((ulong)0x100000000));
-            double _r = (double)(raw[2] - (ulong)0x6400000000) / 100.0;
-            double res = (double)dash + (double)_f / 60.0 + _r / 3600.0;
-            return Math.Floor(res * 1000000.0) / 1000000.0;
         }
 
         #endregion

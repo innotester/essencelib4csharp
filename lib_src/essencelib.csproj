@@ -44,8 +44,17 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\ExifUtil4Jpeg.cs" />
-    <Compile Include="Image\ExifTags.cs" />
+    <Compile Include="Image\EXIF\Enums\TagType.cs" />
+    <Compile Include="Image\EXIF\ExifValues.cs" />
+    <Compile Include="Image\EXIF\ValueType\Aperture.cs" />
+    <Compile Include="Image\EXIF\ExifTag.cs" />
+    <Compile Include="Image\EXIF\ValueType\ExifTagValue.cs" />
+    <Compile Include="Image\EXIF\ExifUtil4Jpeg.cs" />
+    <Compile Include="Image\EXIF\ExifTags.cs" />
+    <Compile Include="Image\EXIF\ValueType\GPSRational.cs" />
+    <Compile Include="Image\EXIF\ValueType\Rational.cs" />
+    <Compile Include="Image\EXIF\ValueType\ShutterSpeed.cs" />
+    <Compile Include="Image\EXIF\Enums\TagValueType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
