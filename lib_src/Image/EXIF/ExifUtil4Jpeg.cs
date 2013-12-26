@@ -20,7 +20,7 @@ namespace essencelib.Image.EXIF
     {
         public static FileStream GetReadJpegFileStream(string file_name)
         {
-            FileStream rtn = ExifUtil4Jpeg.GetReadFileStream(file_name);
+            var rtn = ExifUtil4Jpeg.GetReadFileStream(file_name);
 
             if (rtn != null)
             {
@@ -90,7 +90,7 @@ namespace essencelib.Image.EXIF
 
             if (jpg_decoder != null)
             {
-                BitmapSource thumb = jpg_decoder.Frames[0].Thumbnail;
+                var thumb = jpg_decoder.Frames[0].Thumbnail;
                 if (thumb != null)
                 {
                     rtn = GetBitmapFromBitmapSource(thumb);
@@ -141,8 +141,7 @@ namespace essencelib.Image.EXIF
 
         public static ExifValues GetExifValues(BitmapMetadata jpg_metadata)
         {
-            ExifValues rtn = new ExifValues();
-            rtn._metadata = jpg_metadata;
+            var rtn = new ExifValues() { _metadata = jpg_metadata };
             return rtn;
         }
         
@@ -184,7 +183,7 @@ namespace essencelib.Image.EXIF
 
         public static FileStream GetReadFileStream(string file_name)
         {
-            FileStream rtn = new FileStream(
+            var rtn = new FileStream(
                                     file_name
                                     , FileMode.Open
                                     , FileAccess.Read
@@ -198,9 +197,9 @@ namespace essencelib.Image.EXIF
         {
             Bitmap rtn;
 
-            using (MemoryStream stream = new MemoryStream())
+            using (var stream = new MemoryStream())
             {
-                BmpBitmapEncoder enc = new BmpBitmapEncoder();
+                var enc = new BmpBitmapEncoder();
                 enc.Frames.Add(BitmapFrame.Create(bmp_src));
                 enc.Save(stream);
                 rtn = new Bitmap(stream);

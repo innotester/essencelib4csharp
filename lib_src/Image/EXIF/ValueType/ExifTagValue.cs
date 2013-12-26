@@ -183,7 +183,7 @@ namespace essencelib.Image.EXIF
             }
             else if (value is BitmapMetadataBlob)
             {
-                BitmapMetadataBlob blob = value as BitmapMetadataBlob;
+                var blob = value as BitmapMetadataBlob;
 
                 switch (tag_key)
                 {
@@ -215,14 +215,7 @@ namespace essencelib.Image.EXIF
                     case 0x927C: // MakerNote
                         string mnote = Encoding.ASCII.GetString(blob.GetBlobValue());
                         int idx = mnote.IndexOf('\0');
-                        if (idx > 0)
-                        {
-                            rtn = mnote.Substring(0, idx);
-                        }
-                        else
-                        {
-                            rtn = mnote;
-                        }
+                        rtn = idx > 0 ? mnote.Substring(0, idx) : mnote;
                         break;
                     case 0xA000: // FlashpixVersion
                         rtn = Encoding.ASCII.GetString(blob.GetBlobValue());

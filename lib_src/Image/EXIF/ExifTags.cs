@@ -48,7 +48,7 @@ namespace essencelib.Image.EXIF
         {
             if (tags.Count == 0)
             {
-                StringBuilder sb_vdesc = new StringBuilder();
+                var sb_vdesc = new StringBuilder();
                 Add(0x0, "GPSVersionID               ", "GPS tag version                               ", "/app1/ifd/gps/subifd:{ulong=0}", TagValueType.Unknown);
 
                 sb_vdesc.Clear();
